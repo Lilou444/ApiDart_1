@@ -14,6 +14,10 @@ mongoose.connect(process.env.DB_CONNECT,
     () => console.log("Connected to MongoDB"));
 
 
+// Views
+app.set('views', './views');
+app.set('view engine','ejs');
+
 //Routes
 app.get('/',(req,res) => {
     res.send('Dart Master');
