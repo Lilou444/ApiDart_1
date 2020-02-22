@@ -1,14 +1,5 @@
 const router = require('express').Router()
-const {
-    UnprocessableError,
-    NotAvailableError,
-    HttpError
-} = require('../errors/HttpError')
-const GameModel = require('./../models/Game')
-const GamePlayerModel = require('./../models/GamePlayer')
-const GameShotModel = require('./../models/GameShot')
-const PlayerModel = require('./../models/Player')
-const Game = require('./../engine/gamemodes/301')
+
 
 router.get('/', async (req, res, next) => {
    //get
