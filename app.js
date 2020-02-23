@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
-// const Router = require('./src/Routes')
+const Router = require('./routes')
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 dotenv.config();
@@ -22,9 +22,11 @@ app.set('view engine','ejs');
 app.get('/',(req,res) => {
     res.send('Dart Master');
 });
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-// app.use(Router);
+
+app.use(Router);
 
 
 //Server 
