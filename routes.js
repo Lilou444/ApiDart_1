@@ -1,8 +1,8 @@
 const router = require('express').Router()
 
  
-const Game = requirer('./routers/Game.js')
-const Player = requirer('./routers/Player.js')
+const Game = require('./routers/Game.js')
+const Player = require('./routers/Player.js')
 
 // error à ajouter non encore traitée 
 

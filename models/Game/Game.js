@@ -43,7 +43,7 @@ module.exports = {
 
   // fonction getAll
     getAll: async (limit, offset) => {
-      const users = await User.find()
+      const users = await GameModel.find()
     //  console.log(users)
      return users
   ​
