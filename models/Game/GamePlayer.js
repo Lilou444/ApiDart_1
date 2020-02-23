@@ -1,4 +1,4 @@
-
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema
  
 const GamePlayer = new Schema({
@@ -31,3 +31,5 @@ const GamePlayer = new Schema({
 const modelGamePlayer = mongoose.model('GamePlayer', GamePlayer)
 
 module.exports = modelGamePlayer
+
+//Models route gamePlayer

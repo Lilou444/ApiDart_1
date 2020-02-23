@@ -1,4 +1,4 @@
-
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema
  
 const Player = new Schema({
@@ -22,3 +22,6 @@ const Player = new Schema({
 const modelPlayer = mongoose.model('Player', Player)
 
 module.exports = modelPlayer
+
+
+//Models route Player

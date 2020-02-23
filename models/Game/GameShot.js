@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema
 
 const GameShot = new Schema({
@@ -29,3 +30,5 @@ const GameShot = new Schema({
 const modelGameShot = mongoose.model('GameShot', GameShot)
 
 module.exports = modelGameShot
+
+//Models route gameShot
