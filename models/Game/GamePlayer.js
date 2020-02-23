@@ -34,21 +34,21 @@ module.exports = {
 
     // fonction get 
 
-  get: async (userId) => {
+  get: async (playerId) => {
       console.log("get user")
-      const user = await User.find({id:userId})
+      const user = await modelGamePlayer.find({id:playerId})
       console.log(user)
       return user
     },
   ​
     count: async() => {
-     return await User.count({})
+     return await modelGamePlayer.count({})
     },
   ​
 
   // fonction getAll
     getAll: async (limit, offset) => {
-      const users = await User.find()
+      const users = await modelGamePlayer.find()
     //  console.log(users)
      return users
   ​
@@ -56,14 +56,11 @@ module.exports = {
   ​
     // fonction insert 
     insert: async (params) => {
-      const userId = require('uuid').v4()
-      let user = { id: userId,
-                  pseudo: params.pseudo,
-                  firstname: params.firstname,
-                  lastname: params.lastname,
-                  email: params.email,
-                  password: params.password }
-      let doc = await User.collection.insertMany([user], function(err) {
+      const playerId = require('uuid').v4()
+      let user = { id: playerId,
+        gameId: params.gameId
+     }
+      let doc = await modelGamePlayer.collection.insertMany([user], function(err) {
             console.log("insert error")
         })
       console.log(user)
@@ -73,26 +70,11 @@ module.exports = {
   ​
     },
   ​
-   // fonction update 
-    update: async(userId, params) => {
-      let user = { id: userId,
-        pseudo: params.pseudo,
-        firstname: params.firstname,
-        lastname: params.lastname,
-        email: params.email,
-        password: params.password }
-      const doc = await User.updateOne({id:userId},user, function(err) {
-          console.log("update error")
-      })
-  ​
-      return doc
-   
-    },
   ​
    // fonction delete
-    remove: async(userId) => {
+    remove: async(playerId) => {
       console.log("delete")
-      const doc = await User.deleteOne({id:userId})
+      const doc = await modelGamePlayer.deleteOne({id:playerId})
       return doc
     }
    
