@@ -27,21 +27,17 @@ const Game = new Schema({
       required: true },
 }, { versionKey: false })
 
-const modelGame = mongoose.model('Game', Game)
+const GameModel = mongoose.model('Game', Game)
 
 module.exports = {
 
     // fonction get 
 
-  get: async (userId) => {
-      console.log("get user")
-      const user = await User.find({id:userId})
+  get: async (gameId) => {
+      console.log("get game")
+      const user = await GameModel.find({id:gameId})
       console.log(user)
       return user
-    },
-  ​
-    count: async() => {
-     return await User.count({})
     },
   ​
 
@@ -55,43 +51,35 @@ module.exports = {
   ​
     // fonction insert 
     insert: async (params) => {
-      const userId = require('uuid').v4()
-      let user = { id: userId,
-                  pseudo: params.pseudo,
-                  firstname: params.firstname,
-                  lastname: params.lastname,
-                  email: params.email,
-                  password: params.password }
-      let doc = await User.collection.insertMany([user], function(err) {
-            console.log("insert error")
-        })
-      console.log(user)
-      console.log(doc)
-  ​
-      return doc
-  ​
-    },
+        const gameId = require('uuid').v4()
+        let user = { id: gameId,
+                    name: params.name,
+                    mode: params.mode }
+        let doc = await GameModel.collection.insertMany([user], function(err) {
+              console.log("insert error")
+          })
+        console.log(user)
+        console.log(doc)
+    ​
+        return doc
+    ​
+      },
   ​
    // fonction update 
-    update: async(userId, params) => {
-      let user = { id: userId,
-        pseudo: params.pseudo,
-        firstname: params.firstname,
-        lastname: params.lastname,
-        email: params.email,
-        password: params.password }
-      const doc = await User.updateOne({id:userId},user, function(err) {
-          console.log("update error")
-      })
-  ​
-      return doc
-   
-    },
+   update: async(gameId, params) => {
+    let user = { id: gameId,
+      name: params.name,
+      mode: params.mode}
+    const doc = await GameModel.updateOne({id:gameId},user, function(err) {
+        console.log("update error")
+    })   ​
+    return doc  
+  },
   ​
    // fonction delete
-    remove: async(userId) => {
+    remove: async(gameId) => {
       console.log("delete")
-      const doc = await User.deleteOne({id:userId})
+      const doc = await GameModel.deleteOne({id:gameId})
       return doc
     }
    
