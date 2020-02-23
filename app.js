@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
-const Router = require('./src/Routes')
+// const Router = require('./src/Routes')
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 dotenv.config();
@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 
 
 //Server 
-app.listen(3000, () => {
+app.listen(3034, () => {
     console.log("Listening at :3000...");
 });
 
