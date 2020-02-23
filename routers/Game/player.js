@@ -1,63 +1,60 @@
 const router = require('express').Router()
-const User = require('../../models/player')
+const Player = require('../../models/player')
 
-/* Users : liste */
+/* Players : liste */
+
+// Get All
 router.get('/', function(req, res, next) {
   let limit = parseInt(req.query.limit) || 20
   let offset = parseInt(req.query.offset) || 0
   if (limit > 100) limit = 100
 
   Promise.all([
-    User.getAll(limit, offset),
-    User.count()
+    Player.getAll(limit, offset),
+    Player.count()
   ]).then((results) => {
     res.format({
       html: () => {
-        res.render('users/index', {
-          users: results[0],
+        res.render('Players/index', {
+          Players: results[0],
           count: results[1].count,
           limit: limit,
           offset: offset
         })
       },
       json: () => {
-        res.send({
-          data: results[0],
-          meta: {
-            count: results[1].count
-          }
-        })
+         //
       }
     })
   }).catch(next)
 })
 
+// Add player
 router.post('/', (req, res, next) => {
   if (
-    !req.body.pseudo || req.body.pseudo === '' ||
-    !req.body.email || req.body.email === '' ||
-    !req.body.firstname || req.body.firstname === ''
+    !req.body.name || req.body.name === '' ||
+    !req.body.email || req.body.email === '' 
   ) {
     let err = new Error('Bad Request')
     err.status = 400
     return next(err)
   }
 
-  User.insert(req.body).then(() => {
+  Player.insert(req.body).then(() => {
     res.format({
-      html: () => { res.redirect('/users') },
+      html: () => { res.redirect('/players') },
       json: () => { res.status(201).send({message: 'success'}) }
     })
   }).catch(next)
 })
 
-
-router.get('/add', function(req, res, next) {
+// New player
+router.get('/new', function(req, res, next) {
   res.format({
     html: () => {
-      res.render('users/edit', {
-        user: {},
-        action: '/users'
+      res.render('players/edit', {
+        Player: {},
+        action: '/players'
       })
     },
     json: () => {
@@ -68,15 +65,16 @@ router.get('/add', function(req, res, next) {
   })
 })
 
-router.get('/:userId/edit', function(req, res, next) {
-  User.get(req.params.userId).then((user) => {
-    if (!user) return next()
+// Edit player
+router.get('/:id/edit', function(req, res, next) {
+  Player.get(req.params.PlayerId).then((Player) => {
+    if (!Player) return next()
 
     res.format({
       html: () => {
-        res.render('users/edit', {
-          user: user,
-          action: `/users/${user.rowid}?_method=put`
+        res.render('players/form', {
+          Player: Player,
+          action: `/players/${Player.rowid}?_method=put`
         })
       },
       json: () => {
@@ -88,60 +86,36 @@ router.get('/:userId/edit', function(req, res, next) {
   }).catch(next)
 })
 
-router.get('/:userId', (req, res, next) => {
-  User.get(req.params.userId).then((user) => {
-    if (!user) return next()
+// Get player by Id
+router.get('/:id', (req, res, next) => {
+  Player.get(req.params.id).then((Player) => {
+    if (!Player) return next()
 
     res.format({
-      html: () => { res.render('users/show', { user: user }) },
-      json: () => { res.send({ data: user }) }
+      html: () => { res.render('players/show', { Player: Player }) },
+      json: () => { res.send({ data: Player }) }
     })
   }).catch(next)
 })
 
-router.put('/:userId', (req, res, next) => {
-  User.update(req.params.userId, req.body).then(() => {
-    res.format({
-      html: () => { res.redirect(`/users/${req.params.userId}`) },
-      json: () => { res.status(200).send({ message: 'success' }) }
-    })
-  }).catch(next)
-})
-
-router.delete('/:userId', (req, res, next) => {
-  User.remove(req.params.userId).then(() => {
-    res.format({
-      html: () => { res.redirect(`/users`) },
-      json: () => { res.status(200).send({ message: 'success' }) }
-    })
-  }).catch(next)
-})
-
-module.exports = router
-
-router.get('/', async (req, res, next) => {
-    // get all 
-})
-
-router.get('/new', (req, res, next) => {
-   // new 
-})
-
-router.get('/:id', async (req, res, next) => {
-   //get by id
-})
-
-router.get('/:id/edit', (req, res, next) => {
-   //get form
-})
-
+// Edit player
 router.patch('/:id', (req, res, next) => {
-   // get patch by id
+  Player.update(req.params.id, req.body).then(() => {
+    res.format({
+      html: () => { res.redirect(`/players/${req.params.id}`) },
+      json: () => { res.status(200).send({ message: 'success' }) }
+    })
+  }).catch(next)
 })
 
-router.delete('/:id', async (req, res, next) => {
-
-  // delete
+// Delete player
+router.delete('/:id', (req, res, next) => {
+  Player.remove(req.params.id).then(() => {
+    res.format({
+      html: () => { res.redirect(`/players`) },
+      json: () => { res.status(200).send({ message: 'success' }) }
+    })
+  }).catch(next)
 })
 
 module.exports = router
