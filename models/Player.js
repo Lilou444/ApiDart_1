@@ -19,42 +19,35 @@ const Player = new Schema({
   createdAt: Date,
 }, { versionKey: false })
 
-const modelPlayer = mongoose.model('Player', Player)
+const PlayerModel = mongoose.model('Player', Player)
 
 module.exports = {
 
       // fonction get 
 
-    get: async (userId) => {
-        console.log("get user")
-        const user = await User.find({id:userId})
+    get: async (playerId) => {
+        console.log("get player")
+        const user = await PlayerModel.find({id:playerId})
         console.log(user)
         return user
-      },
-    ​
-      count: async() => {
-       return await User.count({})
       },
     ​
 
     // fonction getAll
       getAll: async (limit, offset) => {
-        const users = await User.find()
+        const user = await PlayerModel.find()
       //  console.log(users)
-       return users
+       return user
     ​
       },
     ​
       // fonction insert 
       insert: async (params) => {
-        const userId = require('uuid').v4()
-        let user = { id: userId,
-                    pseudo: params.pseudo,
-                    firstname: params.firstname,
-                    lastname: params.lastname,
-                    email: params.email,
-                    password: params.password }
-        let doc = await User.collection.insertMany([user], function(err) {
+        const playerId = require('uuid').v4()
+        let user = { id: playerId,
+                    name: params.name,
+                    email: params.email }
+        let doc = await PlayerModel.collection.insertMany([user], function(err) {
               console.log("insert error")
           })
         console.log(user)
@@ -65,25 +58,20 @@ module.exports = {
       },
     ​
      // fonction update 
-      update: async(userId, params) => {
-        let user = { id: userId,
-          pseudo: params.pseudo,
-          firstname: params.firstname,
-          lastname: params.lastname,
-          email: params.email,
-          password: params.password }
-        const doc = await User.updateOne({id:userId},user, function(err) {
+      update: async(playerId, params) => {
+        let user = { id: playerId,
+          name: params.name,
+          email: params.email}
+        const doc = await PlayerModel.updateOne({id:playerId},user, function(err) {
             console.log("update error")
-        })
-    ​
-        return doc
-     
+        })   ​
+        return doc  
       },
     ​
      // fonction delete
-      remove: async(userId) => {
+      remove: async(playerId) => {
         console.log("delete")
-        const doc = await User.deleteOne({id:userId})
+        const doc = await PlayerModel.deleteOne({id:playerId})
         return doc
       }
      
