@@ -23,37 +23,6 @@ const GameShot = new Schema({
     default: null
   }, 
   createdAt: Date,
-}, {
-  versionKey: false
-})
+}, { collection: 'gameShot' });
 
-const modelGameShot = mongoose.model('GameShot', GameShot)
-
-module.exports = {
-
-  ​
-    // fonction insert 
-    insert: async (params) => {
-      const id = require('uuid').v4()
-      let user = { id: id,
-                  gameId: params.gameId,
-                  playerId: params.playerId,
-                  multiplicator: params.multiplicator,
-                  sector: params.sector
-                 }
-      let doc = await modelGameShot.collection.insertMany([user], function(err) {
-            console.log("insert error")
-        })
-      console.log(user)
-      console.log(doc)
-  ​
-      return doc
-  ​
-    },
-  ​
-}
-
-
-//Models route gameShot
-
-
+module.exports = mongoose.model('GameShot', GameShot);

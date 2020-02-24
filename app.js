@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 dotenv.config();
 
+const playerRoutes = require('./routers/Player');
 
 
 //Connexion Mongoose 
@@ -27,11 +28,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // app.use(Router);
-
+app.use('/players', playerRoutes); 
 
 //Server 
 app.listen(3034, () => {
-    console.log("Listening at :3000...");
+    console.log("Listening at :3034...");
 });
 
 //commentaire pour tester mon problème de merge ( deuxieme api)

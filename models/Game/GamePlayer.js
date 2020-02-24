@@ -26,58 +26,7 @@ const GamePlayer = new Schema({
       default: false,
     },
   createdAt: Date,
-}, { versionKey: false })
+}, { collection: 'gamePlayer' });
 
-const modelGamePlayer = mongoose.model('GamePlayer', GamePlayer)
+module.exports = mongoose.model('GamePlayer', GamePlayer);
 
-module.exports = {
-
-    // fonction get 
-
-  get: async (playerId) => {
-      console.log("get user")
-      const user = await modelGamePlayer.find({id:playerId})
-      console.log(user)
-      return user
-    },
-  ​
-    count: async() => {
-     return await modelGamePlayer.count({})
-    },
-  ​
-
-  // fonction getAll
-    getAll: async (limit, offset) => {
-      const users = await modelGamePlayer.find()
-    //  console.log(users)
-     return users
-  ​
-    },
-  ​
-    // fonction insert 
-    insert: async (params) => {
-      const playerId = require('uuid').v4()
-      let user = { id: playerId,
-        gameId: params.gameId
-     }
-      let doc = await modelGamePlayer.collection.insertMany([user], function(err) {
-            console.log("insert error")
-        })
-      console.log(user)
-      console.log(doc)
-  ​
-      return doc
-  ​
-    },
-  ​
-  ​
-   // fonction delete
-    remove: async(playerId) => {
-      console.log("delete")
-      const doc = await modelGamePlayer.deleteOne({id:playerId})
-      return doc
-    }
-   
-}
-
-//Models route gamePlayer
