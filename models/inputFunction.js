@@ -15,9 +15,7 @@ async function askNbPlayers() {
       },
       filter:Number,
       },
-    ).then((answer) => {
-      return answer.nbPlayers
-    })
+    )
   }
 
 
@@ -38,7 +36,6 @@ async function askNbPlayers() {
     return namePlayerTab
   }
   
-
   async function askModeParams() {
 
     return await inquirer.prompt(
@@ -49,8 +46,12 @@ async function askNbPlayers() {
         choices: ['Tour du monde', '301', 'Cricket']
       
       }
-    ).then((answer) => {
-      return answer.mode
-    })
+    )
   }
 
+module.exports = {
+  askModeParams,
+  askNamePlayer,
+  askNbPlayers,
+
+}
