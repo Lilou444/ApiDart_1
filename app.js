@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const playerRoutes = require('./routers/Player');
+const gameRoutes = require('./routers/Game');
 
 
 //Connexion Mongoose 
@@ -28,7 +29,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // app.use(Router);
-app.use('/players', playerRoutes); 
+app.use('/players', playerRoutes);
+app.use('/games', gameRoutes);
 
 //Server 
 app.listen(3034, () => {
