@@ -1,6 +1,7 @@
 const Player = require('./models/Player');
 const Game = require('./models/game');
 const TourDuMonde = require('./models/tourDuMonde');
+const the301 = require('./models/the301');
 
 
 
@@ -9,6 +10,7 @@ let namePlayers;
 let mode;
 let modeGame = null;
 let playersParams = [];
+
 goGame = new Game
 
 
@@ -25,12 +27,13 @@ async function main() {
 
   randomPlayer(playersParams)
   mode = await goGame.askModeParams()
+  console.log(mode)
   if (mode.mode === 'Tour du monde'){
    modeGame = new TourDuMonde(playersParams) 
    modeGame.playGame()
   }
   if(mode.mode === '301'){
-    game = new the301(playersParams)
+    modeGame = new the301(playersParams)
     modeGame.playGame()
   }
 }
@@ -44,4 +47,5 @@ async function randomPlayer(array) {
     }
     return array
    }
+
 main()
