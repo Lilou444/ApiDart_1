@@ -25,10 +25,7 @@ async function main() {
 
   randomPlayer(playersParams)
   mode = await goGame.askModeParams()
-  console.log(mode)
-  console.log('oui')
   if (mode.mode === 'Tour du monde'){
-   console.log('oui')
    modeGame = new TourDuMonde(playersParams) 
    modeGame.playGame()
   }

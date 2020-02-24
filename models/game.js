@@ -15,17 +15,12 @@ class Game {
          this.currentPlayerId = 0;
          return this.players[0];
      }
+     
       else {
          this.currentPlayerId ++
-         return  this.players[this.currentPlayerId+1];
+         return  this.players[this.currentPlayerId];
         }
      }
-  
-  goPlay(player){
-      if(player.shot === 1){
-          console.log(" C'est à toi ! "+player.name);
-        }
-    }
 
     async  askNbPlayers() {
         return await inquirer.prompt(
@@ -74,5 +69,25 @@ class Game {
           }
         )
       }
+
+
+  async  Shoot () {
+    return await inquirer.prompt(
+        {
+            type: 'number',
+            name: 'shoot',
+            message: 'lances ta flêchette : ',
+            validate: function (value){
+                if(isNaN(parseFloat(value))) {
+                    return "Saisis ton nombre !" 
+                }
+                if (value <= 0 || value >= 21) {
+                    throw new RangeError( "La valeur doit être comprise entre " + 0 + " et " + 21 );
+                }
+                return true
+            }
+        },
+      )
+} 
 }
 module.exports = Game
