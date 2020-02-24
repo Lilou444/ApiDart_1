@@ -89,5 +89,22 @@ class Game {
         },
       )
 } 
+
+  async Shoot301() {
+    var questions = [ {
+      type: 'number',
+      name: 'sector',
+      message: 'lances ta flêchette :',
+    },
+    {
+      type: 'number',
+      name: 'multiplier',
+      message: 'Rentrez le multiple du tir du tir:',
+    }];
+    return await inquirer.prompt(questions).then(answers => {
+        return answers
+    })
+  }
+  
 }
 module.exports = Game
