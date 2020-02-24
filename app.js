@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
-const Router = require('./routes')
+// const Router = require('./routes')
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 dotenv.config();
@@ -26,7 +26,7 @@ app.get('/',(req,res) => {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use(Router);
+// app.use(Router);
 
 
 //Server 
