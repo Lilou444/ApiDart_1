@@ -1,3 +1,9 @@
 node_modules
 
 routers/Player.js
+
+views/Game/gamePlayer.ejs
+
+views/Partials/footer.ejs
+
+views/Partials/layout.ejs
