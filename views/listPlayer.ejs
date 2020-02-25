@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="../assets/favicon.ico" href="/favicon.ico"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>API DART</title>
+</head>
+<body>
+    <div class="container mt-4 ">
+    <form action="/" method="#">
+        <button class="btn btn-danger">
+          <i class="fa fa-trash-o fa-lg mr-2"></i>
+          Retour
+        </button>
+      </form>
+    </div>
+    <div class="container mt-4 text-center">
+        <h1>Liste des joueurs</h1>
+        <% if (player[0]) { %>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Prénom</th>
+                <th scope="col">Email</th>
+                <th scope="col">Victoire</th>
+                <th scope="col">Défaite</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% player.forEach(player => { %>
+                <tr>
+                  <td><%= player.name %></td>
+                  <td><%= player.email %></td>
+                  <td><%= player.gameWin %></td>
+                  <td><%= player.gameLost %></td>
+                  <td class="d-flex justify-content-around">
+                    <a href="/players/<%= player.id %>" class="btn btn-success">
+                      <i class="fa fa-pencil fa-lg mr-2"></i>
+                      Edit
+                    </a>
+                    <form action="/players/<%=player.id%>" method="DELETE">
+                      <button type="submit" class="btn btn-danger ml-2">
+                        <i class="fa fa-trash-o fa-lg mr-2"></i>
+                        Delete
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        <% } else { %>
+          <div class="text-center">
+            <h2 class="py-5">Fin de tableau</h2>
+          </div>
+        <% } %>
+      </div>
+</body>
+</html>
+
