@@ -1,124 +1,138 @@
 const router = require('express').Router();
 const Game = require('../models/Game/Game');
 
-
 router.get('/', async (req,res) => {
-  const Games = await Game.find({}, function(err, Games) {
-    let GameMap = {};
-
-    Games.forEach(function(Game) {
-      GameMap[Game._id] = Game;
-    });
-    res.send(GameMap);
-  });
-  res.format({
-    html: function () {
-      res.render('listGame');
-    },
-    json: function () {
-        res.send(Games)
+  Game.find(function(err, game) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render('listGame', { game: game});
+      console.log(game);
     }
 });
 })
 
+
+
 router.post('/', async (req,res,next) => {
-
-  const Game = new Game({
-    name: req.body.name,
-    mode: req.body.mode,
-  })
-
-  Game.save((newGame) => {
-    res.format({
-      html: function () {
-        res.redirect('formGame'+ newGame.id);
-      },
-      json: function () {
-        const Game = await Game.collection.insertOne(newGame)
-        res.json(Game)
-      }
-    })
-  })
+  if( !req.body.name || req.body.name === '' ||
+  !req.body.mode || req.body.mode === '' ||
+  !req.body.status || req.body.status === '')
+{
+  let err = new Error('Please fill all the inputs');
+  return next(err);
+}
+Game.collection.insertOne(req.body).then(() => {
+  res.redirect('/games');
+}).catch(() =>{
+  res.status(201).send()
 });
-
-//   if( !req.body.name || req.body.name === '' ||
-//   !req.body.email || req.body.email === '')
-// {
-//   let err = new Error('Please fill all the inputs');
-//   return next(err);
-// }
-// const Games = await Game.collection.insertOne(req.body).then(() => {
-// res.redirect('/Games');
-// }).catch(next);
-// res.format({
-//   html: function () {
-//     res.render('formGame');
-//   },
-//   json: function () {
-//       res.send('new')
-//   }
-// });
+});
 
 router.get('/new', async (req,res,next) => {
   res.format({
-    html: function () {
-      res.render('formGame');
+    html : () => {
+      res.render('formGame', {
+        id: "",
+        name: "",
+        mode: "",
+        status: "",
+        method: 'POST'
+      })
     },
-    json: function () {
-        res.send('new')
+    json : () => {
+      res.status(406).send()
     }
-})
-});
-
-router.get('/:id',  async (req,res,next) => {
-  const Game = await Game.find({_id: req.params.id}).catch(next);
-  res.format({
-    html: function () {
-        res.redirect('/:id/edit')
-    },
-    json: function () {
-        res.json(Game)
-    }
-})
-});
-
-router.get('/edit/:id',async (req,res,next) => {
-    res.format({
-      html: function () {
-        const Game = await Game.find({_id: req.params.id}).catch(next);
-        res.render('formGame',{Game})
-      },
-      json: function () {
-          res.render('error')
-      }
   })
+
 });
 
-router.patch('/:id',async (req,res,next) => {
-    Game.findByIdAndUpdate({_id: req.params.id}, {title: req.body.name, text: req.body.mode }).then(() => {
-      res.format({
-        html: function () {
-          res.render('/games')
-        },
-        json: function () {
-            res.json('error')
-        }
-    })
-    }).catch(next);
-;})
 
-router.delete('/:id', async (req,res) => {
-   let id = req.params.id;
-    Game.findByIdAndDelete(id, () => {
+router.get('/:id', async (req, res, next) => {
+
+  Game.findById({_id: req.params.id})
+  .then((game) => {
+    res.format({
+      html : () => {
+        res.render('game', {
+          game: game,
+        })
+      },
+      json : () => {
+        res.json(game)
+      }
+    })
+  })
+  .catch((err) => {
+    return next(err)
+  })
+})
+
+router.get('/:id/edit', (req, res, next) => {
+
+  Game.findOne({_id: req.params.id})
+  .then((game) => {
+    res.format({
+      html : () => {
+        res.render('formGame', {
+          id: req.params.id,
+          name: game.name,
+          mode: game.mode,
+          status: game.status,
+          method: 'PATCH'
+        })
+      },
+      json : () => {
+        res.send('error')
+      }
+    })
+
+  })
+  .catch((err) => {
+    return next(err)
+  })
+})
+
+
+router.patch('/:id', (req, res, next) => {
+  const body = {}
+  if(req.body.name !== undefined){
+    body.name = req.body.name
+  }
+  if(req.body.mode !== undefined){
+    body.mode = req.body.mode
+  }
+  console.log(body)
+  Game.findByIdAndUpdate({_id: req.params.id}, body, () => {
       res.format({
-        html: function () {
-          res.render('/games')
-        },
-        json: function () {
-            res.json('error')
-        }
-    })
-    })
-});
+          html: () => {
+              Player.find().then((game) =>{
+                res.render('listGame',{
+                  game: game
+                });
+              });
+          },
+          json: async () => {
+              const game = await Game.findOne({_id: req.params.id})
+              res.json(game)
+          }
+      })
+  })
+})
+
+router.delete('/:id', async (req, res, next) => {
+  Game.findByIdAndDelete({_id: req.params.id}, () => {
+      res.format({
+          html: () => {
+              res.redirect('/games')
+          },
+          json: () => {
+              res.status(204).send()
+          }
+      })
+  })
+
+})
+
 
 module.exports = router;
