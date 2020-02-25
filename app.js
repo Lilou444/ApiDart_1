@@ -3,6 +3,7 @@ const app = express()
 const mongoose = require('mongoose')
 // const Router = require('./routes')
 const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -22,11 +23,12 @@ app.set('view engine','ejs');
 
 //Routes
 app.get('/',(req,res) => {
-    res.send('Dart Master');
+    res.redirect('/games');
 });
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(methodOverride('_method'));
 
 // app.use(Router);
 app.use('/players', playerRoutes);
