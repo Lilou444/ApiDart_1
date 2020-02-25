@@ -3,122 +3,140 @@ const Player = require('../models/Player');
 
 
 router.get('/', async (req,res) => {
-  const players = await Player.find({}, function(err, Players) {
-    let PlayerMap = {};
-
-    Players.forEach(function(Player) {
-      PlayerMap[Player._id] = Player;
-    });
-    res.send(PlayerMap);
-  });
-  res.format({
-    html: function () {
-      res.render('listPlayer');
-    },
-    json: function () {
-        res.send(players)
+  Player.find(function(err, player) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render('listPlayer', { player: player });
+      console.log(player);
     }
 });
 })
 
-router.post('/', async (req,res,next) => {
 
-  const player = new Player({
-    name: req.body.name,
-    email: req.body.email,
+router.post('/', async (req,res,next) => {
+  if( !req.body.name || req.body.name === '' ||
+  !req.body.email || req.body.email === '' )
+{
+  let err = new Error('Please fill all the inputs');
+  return next(err);
+}
+Player.collection.insertOne(req.body).then(() => {
+  res.redirect('/players');
+}).catch(() =>{
+   res.status(201).json('player')
+})
+});
+
+router.get('/new', async (req,res,next) => {
+  res.format({
+    html : () => {
+      res.render('formPlayer',{
+        id: "",
+        name: "",
+        email: "",
+        method: 'POST'
+      })
+    },
+    json : () => {
+      res.status(406).json('NOT_API_AVAILABLE')
+    }
   })
 
-  player.save((newPlayer) => {
+});
+
+
+router.get('/:id', async (req, res, next) => {
+
+  Player.findById({_id: req.params.id})
+  .then((player) => {
     res.format({
-      html: function () {
-        res.redirect('formPlayer'+ newPlayer.id);
+      html : () => {
+        res.redirect('/players/' + req.params.id + '/edit')
       },
-      json: function () {
-        const player = await Player.collection.insertOne(newPlayer)
+      json : () => {
         res.json(player)
       }
     })
   })
-});
-
-//   if( !req.body.name || req.body.name === '' ||
-//   !req.body.email || req.body.email === '')
-// {
-//   let err = new Error('Please fill all the inputs');
-//   return next(err);
-// }
-// const players = await Player.collection.insertOne(req.body).then(() => {
-// res.redirect('/players');
-// }).catch(next);
-// res.format({
-//   html: function () {
-//     res.render('formPlayer');
-//   },
-//   json: function () {
-//       res.send('new')
-//   }
-// });
-
-router.get('/new', async (req,res,next) => {
-  res.format({
-    html: function () {
-      res.render('formPlayer');
-    },
-    json: function () {
-        res.send('new')
-    }
-})
-});
-
-router.get('/:id',  async (req,res,next) => {
-  const Player = await Player.find({_id: req.params.id}).catch(next);
-  res.format({
-    html: function () {
-        res.redirect('/:id/edit')
-    },
-    json: function () {
-        res.json(Player)
-    }
-})
-});
-
-router.get('/edit/:id',async (req,res,next) => {
-    res.format({
-      html: function () {
-        const Player = await Player.find({_id: req.params.id}).catch(next);
-        res.render('formPlayer',{Player})
-      },
-      json: function () {
-          res.render('error')
-      }
+  .catch((err) => {
+    return next(err)
   })
-});
+})
 
-router.patch('/:id',async (req,res,next) => {
-    Player.findByIdAndUpdate({_id: req.params.id}, {title: req.body.name, text: req.body.email }).then(() => {
-      res.format({
-        html: function () {
-          res.render('/players')
-        },
-        json: function () {
-            res.json('error')
-        }
-    })
-    }).catch(next);
-;})
+router.get('/:id/edit', (req, res, next) => {
 
-router.delete('/:id', async (req,res) => {
-   let id = req.params.id;
-    Player.findByIdAndDelete(id, () => {
+  Player.findOne({_id: req.params.id})
+  .then((player) => {
+    res.format({
+      html : () => {
+        res.render('formPlayer', {
+          id: req.params.id,
+          name: player.name,
+          email: player.email,
+          method: 'PATCH'
+        })
+      },
+      json : () => {
+        res.status(406).send('NOT_API_AVAILABLE')
+      }
+    })
+
+  })
+  .catch((err) => {
+    return next(err)
+  })
+})
+
+
+
+
+router.patch('/:id', (req, res, next) => {
+  const body = {}
+  if(req.body.name !== undefined){
+    body.name = req.body.name
+  }
+  if(req.body.email !== undefined){
+    body.email = req.body.email
+  }
+  console.log(body)
+  Player.findByIdAndUpdate({_id: req.params.id}, body, () => {
       res.format({
-        html: function () {
-          res.render('/players')
-        },
-        json: function () {
-            res.json('error')
-        }
-    })
-    })
-});
+          html: () => {
+              Player.find().then((player) =>{
+                res.render('listPlayer',{
+                  player: player
+                });
+              });
+          },
+          json: async () => {
+              const player = await Player.findOne({_id: req.params.id})
+              res.json(player)
+          }
+      })
+  })
+})
+
+
+
+router.delete('/:id', async (req, res, next) => {
+  Player.findByIdAndDelete({_id: req.params.id}, () => {
+      res.format({
+          html: () => {
+            res.render('listPlayer', {
+              player: player,
+              method: 'DELETE'
+            })
+          },
+          json: () => {
+              res.status(204).send()
+          }
+      })
+  })
+
+})
+
+
+
 
 module.exports = router;
