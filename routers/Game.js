@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const Game = require('../models/Game/Game');
 
+
+//get game list
 router.get('/', async (req,res) => {
   Game.find(function(err, game) {
     if (err) {
@@ -12,8 +14,7 @@ router.get('/', async (req,res) => {
 });
 })
 
-
-
+// insert game
 router.post('/', async (req,res,next) => {
   if( !req.body.name || req.body.name === '' ||
   !req.body.mode || req.body.mode === '' ||
@@ -29,6 +30,8 @@ Game.collection.insertOne(req.body).then(() => {
 });
 });
 
+
+// new game with a form 
 router.get('/new', async (req,res,next) => {
   res.format({
     html : () => {
@@ -48,6 +51,7 @@ router.get('/new', async (req,res,next) => {
 });
 
 
+// get by id for edit 
 router.get('/:id', async (req, res, next) => {
 
   Game.findById({_id: req.params.id})
@@ -93,7 +97,7 @@ router.get('/:id/edit', (req, res, next) => {
   })
 })
 
-
+// patch a game 
 router.patch('/:id', (req, res, next) => {
   const body = {}
   if(req.body.name !== undefined){
@@ -120,6 +124,7 @@ router.patch('/:id', (req, res, next) => {
   })
 })
 
+// delete a game 
 router.delete('/:id', async (req, res, next) => {
   Game.findByIdAndDelete({_id: req.params.id}, () => {
       res.format({

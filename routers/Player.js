@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const Player = require('../models/Player');
 
-
+//get player list
 router.get('/', async (req,res) => {
   Player.find(function(err, player) {
     if (err) {
@@ -13,7 +13,7 @@ router.get('/', async (req,res) => {
 });
 })
 
-
+//insert player
 router.post('/', async (req,res,next) => {
   if( !req.body.name || req.body.name === '' ||
   !req.body.email || req.body.email === '' )
@@ -28,6 +28,8 @@ Player.collection.insertOne(req.body).then(() => {
 })
 });
 
+
+// new player with a form 
 router.get('/new', async (req,res,next) => {
   res.format({
     html : () => {
@@ -46,6 +48,7 @@ router.get('/new', async (req,res,next) => {
 });
 
 
+// get by id for edit 
 router.get('/:id', async (req, res, next) => {
 
   Player.findById({_id: req.params.id})
@@ -64,6 +67,8 @@ router.get('/:id', async (req, res, next) => {
   })
 })
 
+
+// edit player with form 
 router.get('/:id/edit', (req, res, next) => {
 
   Player.findOne({_id: req.params.id})
@@ -90,7 +95,7 @@ router.get('/:id/edit', (req, res, next) => {
 
 
 
-
+// patch a player
 router.patch('/:id', (req, res, next) => {
   const body = {}
   if(req.body.name !== undefined){
@@ -118,7 +123,7 @@ router.patch('/:id', (req, res, next) => {
 })
 
 
-
+//delete a player
 router.delete('/:id', async (req, res, next) => {
   Player.findByIdAndDelete({_id: req.params.id}, () => {
       res.format({
