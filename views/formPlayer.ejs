@@ -3,26 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="shortcut icon" type="../assets/favicon.ico" href="/favicon.ico"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>API DART</title>
 </head>
 <body>
-    <div>
-        <h1>formulaire d'un joueur</h1>
-        <form name="form1" method="POST" action="/players/new">
-        <table>
-            <tr>
-            <td>First name</td>
-            <td><input type="text" name="player.name" ></td>
-            </tr>
-            <tr>
-            <td>last name</td>
-            <td><input type="text" name="player.email" ></td>
-            </tr>
-            <tr>
-            <td colspan="2"><input type="submit" value="Save" ></td>
-            </tr>
-        </table>
-        </form> 
-    </div> 
+    <div class="container mt-4">
+        <h1 class="py-5">Formulaire d'un joueur</h1>
+        <form action="/players/<%=id%>?_method=<%=method%>" method="POST">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" class="form-control" name="name" value="<%=name%>" id="name">
+            </div>     
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="text" class="form-control" name="email" value="<%=email%>" id="email">
+            </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>       
 </body>
 </html>
