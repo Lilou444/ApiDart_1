@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="../assets/favicon.ico" href="/favicon.ico"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>API DART</title>
+</head>
+
+<body>
+    <div class="container mt-4 text-center">
+      <h1 class="py-5">Liste des modes de jeu</h1>
+        <a href="/players" class="btn btn-outline-primary float-left mb-4">Gestion des joueurs</a>
+        <% if (game[0]) { %>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Mode de jeu</th>
+                <th scope="col">Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% game.forEach(game => { %>
+                <tr>
+                  <td><%= game.name %></td>
+                  <td><%= game.mode %></td>
+                  <td><%= game.status %></td>
+                  <td class="d-flex justify-content-around">
+                    <a href="/games/<%= game.id %>" class="btn btn-success">
+                      <i class="fa fa-eye fa-lg mr-2"></i>
+                      Afficher
+                    </a>
+
+                    <a href="/games/<%=game.id%>/edit"  class="btn btn-success">
+                      <i class="fa fa-eye fa-lg mr-2"></i>
+                      Editer
+                    </a>
+      
+                    <form action="/games/<%= game.id %>" method="DELETE">
+                      <button class="btn btn-danger">
+                        <i class="fa fa-trash-o fa-lg mr-2"></i>
+                        Supprimer
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        <% } else { %>
+          <div class="text-center">
+            <h2 class="py-5">Fin</h2>
+          </div>
+        <% } %>
+      </div>      
+</body>
+</html>
