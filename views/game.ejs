@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>API DART</title>
+</head>
+<body>
+  <div class="container mt-4 ">
+    <form action="/" method="#">
+        <button class="btn btn-danger">
+          <i class="fa fa-trash-o fa-lg mr-2"></i>
+          Retour
+        </button>
+      </form>
+    </div>
+    <div class="container mt-4 text-center">
+        <% if (game.status === 'draft') { %>
+          <a href="/games/<%= game.id %>/players" class="btn btn-outline-primary float-left mb-4 <% if (game.status !== 'draft') { %> disabled <% } %>">Gestion de jeu d'un joueur</a>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Nom</th>
+                  <th scope="col">Mode de jeu</th>
+                  <th scope="col">Statut</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                    <td><%= game.name %></td>
+                    <td><%= game.mode %></td>
+                    <td><%= game.status %></td>
+                    <td class="d-flex justify-content-around">
+                      <a href="/games/<%= game.id %>/edit" class="btn btn-warning text-white"> 
+                            <i class="fa fa-pencil fa-lg mr-2"></i>
+                            Editer
+                      </a>
+                    
+                      <form action="/games/<%= game.id %>/?_method=DELETE" method="POST">
+                        <button class="btn btn-danger">
+                          <i class="fa fa-trash-o fa-lg mr-2"></i>
+                          Supprimer
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
+              </tbody>
+            </table>
+      
+            <form action="/games/<%= game.id %>?_method=PATCH" method="POST">
+              <input type="hidden" name="status" value="started">
+              <button type="submit" class="btn btn-primary mt-4 btn-block btn-lg">Début du jeu</button>
+            </form>
+          <% } else { %>
+      
+          <div class="row">
+            <div class="col-lg-8">
+              <table class="table table-sm">
+                <thead>
+                  <th>Secteur</th>
+                  <th>Multiplier</th>
+                </thead>
+                <tbody>
+                  <% for(let index = 1; index <= 5; index++ ) { %>
+                    <tr>
+                      <a href="/games/<%= game.id %>">
+                        <form action="/games/<%= game.id %>/shots" method="post">
+                          <input type="hidden" name="sector" value=<%= index %>>
+                          <input type="hidden" name="multiplicator" value="1">
+                          <td><%= index %></td>
+                          <td>1</td>
+                        </form>
+                      </a>
+                    </tr>
+                  <% } %>
+                </tbody>
+      
+              </table>
+            </div>
+            <div class="col-sm-4">
+              <form action="/" method="#">
+                <button class="btn btn-danger">
+                  <i class="fa fa-trash-o fa-lg mr-2"></i>
+                  Retour
+                </button>
+              </form>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <% } %>
+      </div>
+</body>
+</html>
